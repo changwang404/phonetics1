@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Interactive Quiz</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin: 50px; }
+        .question-container { display: none; }
+        .feedback { color: red; font-weight: bold; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <h2>Interactive Quiz</h2>
+    <div id="quiz-container"></div>
+    <button id="next-btn" style="display: none;" onclick="nextQuestion()">Next Question</button>
+
+    <script>
+        const questions = [
+            {
+                question: "What is the capital of France?",
+                options: ["Berlin", "Madrid", "Paris", "Rome"],
+                correct: 2
+            },
+            {
+                question: "Which planet is known as the Red Planet?",
+                options: ["Earth", "Mars", "Jupiter", "Venus"],
+                correct: 1
+            },
+            {
+                question: "What is 5 + 7?",
+                options: ["10", "12", "14", "15"],
+                correct: 1
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+
+        function loadQuestion() {
+            const container = document.getElementById("quiz-container");
+            container.innerHTML = ""; 
+
+            const questionData = questions[currentQuestionIndex];
+            const questionElem = document.createElement("h3");
+            questionElem.textContent = questionData.question;
+            container.appendChild(questionElem);
+
+            questionData.options.forEach((option, index) => {
+                const button = document.createElement("button");
+                button.textContent = option;
+                button.onclick = () => checkAnswer(index);
+                container.appendChild(button);
+                container.appendChild(document.createElement("br"));
+            });
+            
+            const feedback = document.createElement("div");
+            feedback.id = "feedback";
+            feedback.className = "feedback";
+            container.appendChild(feedback);
+            
+            container.style.display = "block";
+            document.getElementById("next-btn").style.display = "none";
+        }
+
+        function checkAnswer(selectedIndex) {
+            const feedbackElem = document.getElementById("feedback");
+            if (selectedIndex === questions[currentQuestionIndex].correct) {
+                feedbackElem.textContent = "Correct!";
+                feedbackElem.style.color = "green";
+                document.getElementById("next-btn").style.display = "block";
+            } else {
+                feedbackElem.textContent = "Incorrect, try again.";
+                feedbackElem.style.color = "red";
+            }
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                loadQuestion();
+            } else {
+                document.getElementById("quiz-container").innerHTML = "<h3>Quiz Completed!</h3>";
+                document.getElementById("next-btn").style.display = "none";
+            }
+        }
+
+        loadQuestion();
+    </script>
+</body>
+</html>
